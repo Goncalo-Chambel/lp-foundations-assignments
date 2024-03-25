@@ -4,6 +4,7 @@ import pandas as pd
 
 
 def to_float(value):
+    """Helper function to convert values to float"""
     try:
         # First, attempt to directly convert to float
         return float(value)
@@ -12,7 +13,7 @@ def to_float(value):
             # If direct conversion fails, try extracting float using regular expression
             found = re.findall(r"[-+]?\d*\.\d+|\d+", value)
             return float(found[0]) if found else None
-        except:
+        except ValueError:
             # If all fails, return None or some default value
             return None
 
