@@ -16,6 +16,10 @@ dev = ["pytest", "pylint", "pytest-cov", "toml"]
 [tool.setuptools]
 packages = ["life_expectancy"]
 
+[tool.pylint."messages control"]
+disable = [
+   "missing-module-docstring",
+]
 
 [tool.coverage.run]
 omit = [
