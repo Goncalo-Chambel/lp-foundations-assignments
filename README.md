@@ -1,0 +1,1 @@
+[![Python package](https://github.com/Goncalo-Chambel/lp-foundations-assignments/actions/workflows/python-package.yml/badge.svg)](https://github.com/Goncalo-Chambel/lp-foundations-assignments/actions/workflows/python-package.yml)
