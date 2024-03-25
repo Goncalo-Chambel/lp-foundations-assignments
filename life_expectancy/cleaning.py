@@ -32,7 +32,8 @@ def clean_data(country="PT"):
     df.to_csv("life_expectancy/data/pt_life_expectancy.csv", index=False)
 
 
-if __name__ == "__main__":  # pragma: no cover
+if __name__ == "__main__":  # pragma: no cover~
+
     parser = argparse.ArgumentParser()
     parser.add_argument("country")
     args = parser.parse_args()
