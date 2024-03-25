@@ -1,5 +1,21 @@
-import pandas as pd
 import argparse
+import re
+import pandas as pd
+
+
+def to_float(value):
+    """Helper function to convert values to float"""
+    try:
+        # First, attempt to directly convert to float
+        return float(value)
+    except ValueError:
+        try:
+            # If direct conversion fails, try extracting float using regular expression
+            found = re.findall(r"[-+]?\d*\.\d+|\d+", value)
+            return float(found[0]) if found else None
+        except ValueError:
+            # If all fails, return None or some default value
+            return None
 
 
 def clean_data(country="PT"):
@@ -17,14 +33,15 @@ def clean_data(country="PT"):
 
     # Joining the split columns with the original dataframe (minus the composite column)
     df_transformed = pd.concat([split_columns, data_raw.iloc[:, 1:]], axis=1)
-
+    # print(df_transformed["2021"])
     # Unpivoting the data to long format
     df = pd.melt(
         df_transformed, id_vars=composite_columns, var_name="year", value_name="value"
     )
-    df = df.rename(columns={"geo": "region"})
     df["year"] = df["year"].astype(int)
-    df["value"] = pd.to_numeric(df["value"], errors="coerce")
+    df["value"] = df["value"].apply(to_float)
+
+    df = df.rename(columns={"geo": "region"})
 
     df.dropna(inplace=True)
 
@@ -33,6 +50,7 @@ def clean_data(country="PT"):
 
 
 if __name__ == "__main__":  # pragma: no cover
+
     parser = argparse.ArgumentParser()
     parser.add_argument("country")
     args = parser.parse_args()
