@@ -15,15 +15,6 @@ def to_float(value):
             return None
 
 
-def load_data() -> pd.DataFrame:
-    """Function to load data from file"""
-    data = pd.read_csv("life_expectancy/data/eu_life_expectancy_raw.tsv", sep="\t")
-    return data
-
-def save_data(data: pd.DataFrame) -> None:
-    """Function to save data to file"""
-    data.to_csv("life_expectancy/data/pt_life_expectancy.csv", index=False)
-
 def clean_data(data: pd.DataFrame, country:str="PT") -> pd.DataFrame:
     """Function used to clean raw data"""
 
@@ -36,7 +27,7 @@ def clean_data(data: pd.DataFrame, country:str="PT") -> pd.DataFrame:
     df_transformed = pd.concat([split_columns, data.iloc[:, 1:]], axis=1)
 
     df = pd.melt(df_transformed, id_vars=composite_columns, var_name="year", value_name="value")
-    df["year"] = df["year"].astype(int)
+    df["year"] = df["year"].astype("int64")
     df["value"] = df["value"].apply(to_float)
 
     df = df.rename(columns={"geo": "region"})
@@ -48,10 +39,11 @@ def clean_data(data: pd.DataFrame, country:str="PT") -> pd.DataFrame:
 
 if __name__ == "__main__":  # pragma: no cover
 
+    from .load_save import load_data, save_data
     parser = argparse.ArgumentParser()
     parser.add_argument("country")
     args = parser.parse_args()
 
-    data_raw = load_data()
+    data_raw = load_data("life_expectancy/data/eu_life_expectancy_raw.tsv")
     data_cleaned = clean_data(data_raw, args.country)
     save_data(data_cleaned)
