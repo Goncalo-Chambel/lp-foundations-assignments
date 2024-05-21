@@ -1,7 +1,6 @@
-import argparse
 import re
 import pandas as pd
-
+from .region import Region
 
 def to_float(value):
     """Helper function to convert values to float"""
@@ -15,7 +14,7 @@ def to_float(value):
             return None
 
 
-def clean_data(data: pd.DataFrame, country:str="PT") -> pd.DataFrame:
+def clean_data(data: pd.DataFrame, country:Region) -> pd.DataFrame:
     """Function used to clean raw data"""
 
     composite_columns = data.columns[0].split(",")
@@ -34,16 +33,5 @@ def clean_data(data: pd.DataFrame, country:str="PT") -> pd.DataFrame:
 
     df.dropna(inplace=True)
 
-    df = df[df["region"] == country]
+    df = df[df["region"] == country.name]
     return df
-
-if __name__ == "__main__":  # pragma: no cover
-
-    from .load_save import load_data, save_data
-    parser = argparse.ArgumentParser()
-    parser.add_argument("country")
-    args = parser.parse_args()
-
-    data_raw = load_data("life_expectancy/data/eu_life_expectancy_raw.tsv")
-    data_cleaned = clean_data(data_raw, args.country)
-    save_data(data_cleaned)
