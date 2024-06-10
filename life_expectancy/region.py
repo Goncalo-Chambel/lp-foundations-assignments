@@ -65,5 +65,8 @@ class Region(Enum):
     @classmethod
     def get_actual_countries(cls):
         """Method for getting list of actual countries"""
-        return [member.name for name, member in cls.__members__.items() if len(name) == 2]
+        non_countries = {"EU27_2020", "DE_TOT", "EA18", "EA19", "EFTA", "EEA30_2007",
+                         "EEA31", "EU27_2007", "EU28"}
+        return [member.name for name, member in cls.__members__.items()
+                if name not in non_countries]
     
